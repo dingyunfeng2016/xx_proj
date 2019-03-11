@@ -1,0 +1,676 @@
+为什么有vue? 前端一开始只是静态页面没有交互,随着js,ajax的兴起,前端开始借鉴后端
+
+day90
+	内容详细：
+		MVC   Model View Controller	
+		MVVM  Model View ViewModel  数据驱动视图
+		ES6的常用语法
+			-- 变量的提升
+			-- 模板字符串 ``  ${}
+			-- 数据解构
+			-- 类
+			-- 函数
+				-- 注意this跟普通函数的区别
+			-- 单体模式
+		Vue的常用指令
+			-- v-text  innerText
+			-- v-Html  innerHtml
+			-- v-for   :key
+			-- v-if v-else-if v-else   appendChild
+			-- v-show  display
+			-- v-on    @xxxx="自己处理的方法"
+			-- v-bind  :属性名称="属性的值"
+			-- v-model  
+				-- input
+				-- textarea
+				-- select
+			-- 指令修饰符
+				-- .lazy
+				-- .number
+				-- .trim
+			-- 计算属性
+				-- 放入缓存
+				-- 只有数据改变的时候才会重新计算
+			-- 数据的监听
+				-- 注意可变数据类型跟不可变数据类型的区别
+			-- 获取DOM
+				-- 给标签绑定ref属性  ref = "属性值"
+				-- this.$refs.属性值
+			-- 自定义指令
+				-- Vue.directive("指令名称", function(el, binding){
+						el 绑定指令的标签元素
+						binding 指令的所有信息
+				})
+		Vue的组件
+			- 组件注册
+				-- 全局注册
+					--Vue.component("组件名称"，{})
+				-- 局部注册
+					-- const app = new Vue({
+							el: "#app",
+							components: {
+								组件的名称： 组件的配置信息
+							}
+					})
+				-- 子组件的注册
+					-- 在父组件中注册components
+				# 注意写组件标签
+				#每个组件的template只识别一个作用域块
+			- 通信
+				-- 父子的通信
+					-- 在父组件中给子组件绑定属性
+					-- 子组件通过props=["属性名称"]
+				-- 子父的通信
+					-- 子组件先提交事件
+						-- this.$emit("事件名称"，值)
+					-- 在父组件中给子组件绑定事件
+						-- <child @事件名称="父亲处理的方法"></child>
+				-- 非父子的通信
+						-- 声明中间调度器  
+						-- 其中一个组件向中间调度器提交事件
+						-- 另一个组件监听中间调度器的事件
+						-- 注意this的问题
+			- 插槽
+				-- <slot><slot>
+				-- 命名的插槽
+				
+			- 混合
+				-- 代码重用的
+				-- Mixins=[base]
+		路由
+			- 注册路由
+				-- let url = [   #变量放路由和组件的对应关系
+					{
+						path: "/",
+						name: "home",  #这条路由线别名为home
+						component: {
+							template: ``
+						}
+					}
+				]
+				
+				-- let router = new VueRouter({  #创建路由对象
+						routes: url    #放路由信息
+				})
+				
+				-- const app = new Vue({
+						el: "#app",
+						router: router    #vue根实例中注册路由对象
+				})
+				
+				-- <router-link to="/">首页</router-link> 
+				-- <router-view></router-view> #路由对应组件的出口/位置
+				
+			- 子路由的注册
+				-- children: [
+					{}
+				]
+				-- 在父路由对应的组件的template里写router-link router-view
+				
+			- 命名路由
+				-- name
+				-- 注意to加冒号动态绑定
+				 
+			- 路由参数
+				-- {
+					path: "/course/:id?age=xxx",	 #我们输入的参数被id接收
+				}
+				-- this.$route.params.id  #获取id值
+				-- this.$route.query.age    #获取age值
+				
+			- $route vs $router
+				-- $route   当前路由的所有信息的对象 
+				-- $router  VueRouter对象
+				
+			- 重定向
+				-- redirect：{name: "xxx", params:{key:value} }
+				
+			- 手动路由
+				--this.$router.push("/")  #直接跳转到路径/
+				--this.$router.push({name: "xxx"})  #跳转到别名是xxx的路由			
+				
+			- 路由的钩子
+				-- router.beforeEach(function(to,from, next){})
+				
+					-- to 去哪个地址
+					-- from 从哪个地址来
+					-- next  接下来要干什么
+					
+				-- afterEach
+					-- to
+					-- from
+					
+					
+		node.js / npm
+			-- npm 
+			-- 管理工作目录
+				-- npm init -y
+			-- 下载包
+				-- npm i xxxx@0.0   下载名为xxx版本是0.0的依赖包
+			-- 卸载
+				-- npm uninstall xxxx
+			-- 更新
+				-- npm update xxxx
+				
+				
+		webpack  打包代码的工具
+			-- 下载
+				-- npm i webpack webpack-cli
+			-- 打包默认的入口文件
+				--src目录下的 index.js
+			-- 出口文件
+				-- dist目录的main.js
+				
+				
+		vue-cli  快速搭建项目的脚手架工具
+			-- vue-cli中自带webpack,不用单独下载webpack
+			-- 下载cli
+				-- npm i vue-cli
+			-- 用vue-cli帮助我们创建项目
+				-- vue init webpack xxxx
+			-- 启动项目
+				-- cd xxx
+				-- npm run dev/start
+			-- 打包项目
+				--npm run build
+		
+
+day91
+	内容回顾：
+		ES6的常用语法
+			-- 变量 let const 
+			-- 模板字符串``
+			-- 函数 箭头函数 注意this
+			-- 类  class定义类  extends继承 super
+			-- 函数的单体模式
+			-- 数据解构
+			-- js中先export/export default  才能导入import   #export default能改名,export不能改名
+			
+		Vue的常用指令
+			-- v-text  innerText
+			-- v-html  innerHtml
+			-- v-for
+			-- v-if    appendChild
+			-- v-show  display
+			-- v-bind  绑定属性
+			-- v-on    绑定事件
+			-- v-model  双向绑定
+			-- 指令修饰符
+			-- 计算属性
+			-- 数据监听
+			-- 自定义指令
+			-- 获取DOM
+		Vue的组件
+			-- 注册
+				-- 全局注册
+				-- 局部注册
+				-- 子组件的注册
+			-- 通信
+				-- 父子通信
+				-- 子父通信
+				-- 非父子通信
+			-- 混合
+				-- 代码复用
+				-- Mixins
+			-- 插槽
+				-- slot
+				-- 命名插槽
+		生命周期
+			-- beforeCreate
+			-- created
+			-- beforeMount
+			-- mounted
+			-- beforeUpdate
+			-- updated
+			-- beforeDestroy
+			-- destroyed
+		Vue路由
+			-- 注册
+				-- let url = [
+					{
+						path: "/",
+						name: xxx,
+						meta: {},
+						component: {
+							template: ``
+						}
+					}
+				]
+				-- let router = new VueRouter({
+						routes: url
+				})
+				-- const app = new Vue({
+						el: "#app",
+						router: router
+				})
+			-- 子路由的注册
+				-- children: [{},]
+				
+			-- 路由的参数
+				-- path: "/course/:id?age=1"
+				-- "/course/xxxx" id: xxxx
+				-- this.$route.params.id
+				-- this.$route.query.age
+				-- this.$route  存放路由所有信息的对象
+				-- this.$router  VueRouter的实例化对象
+				
+			-- 路由的重定向
+				-- redirect：{name: 'xx', params: {key: value}}
+				
+			-- 手动路由
+				-- this.$router.push("/")
+				
+			-- 路由的钩子
+				-- router.beforeEach(function(to, from, next){
+						to 你去哪
+						from 你从哪里来 
+						next 你接下来要做什么
+						to, from $route对象 路由的所有的信息
+				})
+		npm webpack vue-cli
+			-- npm
+				-- npm init -y  管理工作目录
+				-- npm i xxx@0.0.0  下载依赖包
+				-- npm uninstall xxxx 卸载
+				-- npm update xxx 更新
+			-- webpack 4
+				-- npm i webpack webpack-cli
+				-- webpack --mode development/production
+				-- 默认的入口文件
+					-- src目录下的index.js
+				-- 默认的出口文件
+					-- dist目录下的main.js
+			-- vue-cli 脚手架工具
+				-- npm i vue-cli
+				-- vue init webpack xxxx
+				-- cd xxxxx
+				-- npm run dev
+				-- npm run build
+		-- element-ui
+			-- 按照文档去安装
+	今日内容：
+		vuex
+			-- 安装
+				npm i vuex
+			-- 配置
+				-- 导入vuex
+				   import vuex from "vuex"
+				-- vue使用vuex
+					vue.use(vuex)
+				-- 实例化仓库
+					new vuex.Store({
+						state: {}, #放数据
+						getters: {},  #过滤数据
+						mutations: {} #处理事件
+					})
+				-- new Vue({
+					el: "#app",
+					store,  #在vue对象中注册
+				})
+			-- 获取仓库数据和getters数据
+				this.$store.state.xxx
+				this.$store.getters.xxx
+				
+			-- 改变仓库中的数据
+				-- 组件向仓库提交修改事件
+					this.$store.commit("事件名称", data)
+				--在仓库的mutations中处理commit的事件
+					mutations: {
+						"事件名称"： function(state, data){
+								修改state中的数据
+						}
+					}
+			-- 注意计算属性
+				仓库中的数据建议都放在计算属性中
+				#data和computed都是放数据的,区别是computed中的数据会被监听从而实时更新.data的数据是死的.
+				
+		axios
+			-- 实现ajax技术的工具
+			-- 配置
+				-- 下载
+					npm i axios
+				-- 导入
+					import axios from "axios"
+				-- 在vue的原型链中加入axios属性后,Vue的对象就能用$axios操作axios
+					Vue.prototype.$axios = axios
+			-- 发送请求
+				this.$axios.request({url，method}).then(function(){}).catch(function(){})
+				或指定发get请求 this.$axios.get('url',{}).then().catch()
+				
+		前后端的接通
+			-- 后端设计一个接口(接口就是一个url,这个url的视图return HttpResponse(data)
+			-- 前端通过axios发送请求拿到data, 然后渲染到页面上
+			-- 跨域问题--通过加中间件给所有请求都加请求头来解决.
+			
+	RESTful规范
+		REST风格
+			-- 资源 网页中能看到的都是资源
+			-- URI  统一资源标识符
+			   URL  统一资源定位符
+			-- 统一资源接口
+				对资源的操作根据HTTP请求方式的不同来进行不同操作
+				遵循HTTP请求方式的语义
+			-- 前后端传输的是资源的表述
+			-- 展现的是资源的状态
+		凡是遵循REST风格实现的前后端交互都叫RESTful架构
+			-- 核心思想
+				-- 面向资源去编程  url中尽量名词不要用动词
+				-- 根据HTTP请求方式的不同对资源进行不同的操作
+			-- 在url中体现的
+				-- 体现版本
+					https://v2.bootcss.com/
+					https://bootcss.com/v2
+				-- 体现是否是API
+					https://v2.bootcss.com/api
+				-- 有过滤条件
+					https://v2.bootcss.com/course?page=1
+				-- 尽量用https
+			-- 在返回值中
+				-- 携带状态码
+				-- 返回值
+					-- get  返回查看的所有或者单条数据
+					-- post  返回新增的这条数据
+					-- put/patch  返回更新的这条数据
+					-- delete   返回值空
+				-- 携带错误信息
+				-- 携带超链接
+	FBV和CBV区别				
+			def dispatch(self, request, *args, **kwargs):
+			# 做分发的
+			if request.method.lower() in self.http_method_names:
+				handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+			else:
+				handler = self.http_method_not_allowed
+			return handler(request, *args, **kwargs)	
+	APIView和View的区别
+		-- APIView继承了View
+		-- APIView 重写了as_view以及 dispatch方法
+		-- 在dispatch里重新封装了request
+			-- request = Request()
+			-- 旧的request变成了_request
+		-- get请求数据
+			-- request.query_params
+		-- post请求的数据
+			-- request.data
+	安装rest_framework
+		-- pip install djangorestframework
+		-- 注册rest_framework
+	序列化
+		-- Python--json
+		-- 第一版 用values以及JsonResponse实现序列化
+		-- 第二版 用Django的serialize实现的序列化
+			-- 缺点  不能序列化外键关系
+		-- 第三版用DRF实现序列化
+			-- 第一步声明序列化器
+			-- 第二步 使用我们的序列化器序列化queryset
+				-- 把模型对象放入序列化器进行字段匹配
+					匹配上的字段进行序列化 匹配不上丢弃
+			-- 序列化好的数据在ser_obj.data中
+		
+		-- 外键关系的序列化是嵌套的序列化器对象 
+			注意many=True
+
+==========================================================================================
+day92
+内容回顾：
+	Vuex 集中式状态管理工具 用来解决组件间通信 是一个公共的仓库存放公用数据,
+			例如登录成功后放登录的token,
+			或放api所有组件从store中取api,那么api修改了之后只要修改store中的api.
+		-- 配置
+			-- 下载安装 npm i vuex
+			-- 导入  import Vuex from "vuex"
+			-- Vue.use(Vuex)
+			-- 实例化仓库对象
+				new Vuex.Store({})
+			-- 注册store 在Vue根实例中
+				new Vue({
+					el："#app",
+					store,
+				})
+				
+		-- 获取vuex中数据
+			-- this.$store.state.xxxx
+			-- this.$store.getters.xxxx
+			
+		-- 改变vuex中的数据
+			-- 组件向仓库提交事件
+				this.$store.commit("事件名称"，data)
+			-- 仓库要处理提交的事件
+				mutations: {
+					"事件名称": function(state, data){
+						处理data
+					}
+				}
+				
+				
+	axios  用来发送ajax请求
+		-- 配置
+			-- 下载 npm i axios
+			-- 导入 import axios from "axios"
+			-- 加入原型链 ,加入原型链中以后才能this.$axios
+				Vue.prototype.$axios = axios
+		-- 在组件中发送请求
+			-- this.$axios.request({url, method, data,headers})
+				.then(function(data){})  #请求成功的回调函数
+				.catch(function(data){}) #请求失败的回调函数
+				
+	前后端连接
+		-- 跨域
+			-- 中间件解决跨域 给所有请求加上请求头
+			
+	DRF框架
+		-- RESTful规范
+			REST风格   表述性状态转移
+				-- 资源  在web中凡是有被引用的必要都叫资源
+				-- URI  统一资源标识符
+				   URL  统一资源定位符
+				-- 统一资源接口
+					根据HTTP请求方式的不同对资源进行不同的操作
+				-- 前后端传递的资源的表述
+				-- 前端展示的是资源的状态
+				-- 通过超链接的指引来告诉用户接下来有哪些资源状态可以进入
+			RESTful规范
+				-- 核心思想
+					-- 面向资源去编程 url中尽量用名词不要动词
+					-- 根据HTTP请求方式的不同对资源进行不同的操作
+				-- url中体现
+					-- 版本
+					-- API
+					-- 过滤条件
+					-- HTTPS
+				-- 返回的要求
+					-- 携带状态码
+					-- 返回值
+						-- get 获取的所有或者单条数据
+						-- post 返回新增的这条数据
+						-- put/patch  返回更新的数据
+						-- delete 返回空
+					-- 携带错误信息
+					-- 携带超链接
+					
+	FBV和CBV区别
+		def dispatch(self, request, *args, **kwargs):
+			# GET POST
+			# BookView().get
+			# DJango的View只做了CBV的分发
+			if request.method.lower() in self.http_method_names:
+				handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+			else:
+				handler = self.http_method_not_allowed
+			return handler(request, *args, **kwargs)
+	下载DRF
+		-- pip install djangorestframework
+		-- 在app中注册rest_framework app
+		
+	APIView 和View的区别
+		-- APIView继承了View
+		-- 重写了as_view方法
+			-- 豁免csrf
+		--  def dispatch(self, request, *args, **kwargs):
+				self.args = args
+				self.kwargs = kwargs
+				
+				# 重新封装request
+				# 新的request变成 Request的实例化对象
+				# 旧的request变成了_request
+				request = self.initialize_request(request, *args, **kwargs)
+				self.request = request
+				。。。。。。
+		--  def initialize_request(self, request, *args, **kwargs):
+				parser_context = self.get_parser_context(request)
+
+				return Request(
+					request,
+					parsers=self.get_parsers(),
+					authenticators=self.get_authenticators(),
+					negotiator=self.get_content_negotiator(),
+					parser_context=parser_context
+				)
+		-- Class Request(object):
+				self._request = 旧的request
+				def query_params(self):
+					return self._request.GET
+				def data(self):
+					return post请求的数据
+					
+	序列化
+		-- django实现序列化
+			-- .values  JsonResponse
+			-- serializes.serialize  能够序列化queryset
+			-- 缺点不能解决外键关系的序列化
+		-- DRF的序列化组件
+			-- 第一步  声明序列化器 e.g BookSerializer  写了哪些字段序列化哪些字段 
+						ser_obj=BookSerializer(....)  
+						ser_obj.data拿到序列化后的数据
+						
+			-- 第二步  在视图中使用序列化器序列化queryset
+			-- 序列化好的数据在 ser_obj.data
+			
+今日内容：
+	序列化组件
+		-- 序列化
+		-- 序列化器						
+		-- 反序列化post请求:前端传来数据把它新增到数据库中.
+		
+			-- 确定前端传的数据结构:外键的字段传id,多对多的字段传id列表
+				例如前端传来:
+					book_obj = {
+							"title":"跟alex学python",
+							"price":99,
+							"publisher":1,
+							"authors":[1,2,4]
+							}
+							
+				name = Serializers.IntegerField(required=False)
+						-- required=False 表示反序列化的时候不校验这个字段
+						
+				-- 正序列化和反序列化字段不统一用read_only和write_only区分:		
+					name = Serializers.IntegerField(read_only=True)
+						-- read_only=True  表示这个字段只序列化的时候用
+						-- write_only=True  表示这个字段只反序列化用
+				
+				-- 重写create方法:
+					ser_obj.is_vaild后ser_obj.save()内部会调用create(),create()里面新增数据到数据库中
+					如果字段不全是默认的字段就要重写create(),如果全是默认字段不用重写create()
+					例如:
+					 def create(self, validated_data):
+						 # validated_data 校验通过的数据 就是book_obj
+						 # 通过ORM操作给Book表增加数据
+						 book_obj = Book.objects.create(title=validated_data["title"], pub_time=validated_data["pub_time"], category=validated_data["post_category"], publisher_id=validated_data["publisher_id"])
+						 
+						book_obj.authors.add(*validated_data["author_list"]) #orm新增成功后单独添加多对多字段
+						return book_obj
+					
+						
+			-- 校验前端传来的数据是否合格
+				book_obj=request.data
+				book_obj.is_valid()
+				-- 校验通过return Response(ser_obj.validated_data) 
+				-- 校验不通过返回ser_obj.errors
+			
+		-- 反序列化 put/patch 请求,要传instance
+			-- 重写update方法
+			-- ser_obj = BookSerializer(instance=obj, data=request.data, partial=True)
+			-- 验证通过返回ser_obj.validated_data
+			-- 验证不通过返回ser_obj.errors 
+				
+		-- 验证
+			-- 单个字段的验证  权重 222
+				def validate_字段名称（self, value）:
+					不通过 raise serializers.ValidationError("错误信息")
+					通过 return value
+			-- 多个字段的验证  权重 333
+				def validate(self, attrs):
+					attrs 是所有字段组成的字典
+					不通过 raise serializers.ValidationError("错误信息")
+					通过 return attrs
+			-- 自定义的验证  权重 111
+				def my_validate(value):
+					不通过 raise serializers.ValidationError("错误信息")
+					通过 return value
+				配置
+					-- 给字段加validators=[my_validate]
+		-- ModelSerializer
+			-- class Meta:
+				 model = 表名
+				 fields = "__all__"
+				 # exclude = [xxxx]
+				 depth = 1
+				 # depth 会让所有的外键关系字段变成read_only=True
+				 extra_kwargs={"默认的字段名称"：{自定义的参数配置信息}}
+			-- SerializerMethodField()  方法字段
+				def get_字段名称（self, obj）:
+					obj  每次序列化的模型对象
+					return 自定义的数据
+				
+一直到s14day96-02是rest,没时间看, 从day96-03开始是路飞项目		
+			
+	
+
+		
+同源策略不阻止src请求,只阻止ajax请求:
+	e.g 用src获取后台数据
+		后台:
+			class CorsDemoView(APIView):   #访问地址是 http://127.0.0.1:8008/cors_demo/ 
+				def get(self, request):
+					return HttpResponse("handlerResponse('ok')")
+					
+		前端:
+			<script src="http://127.0.0.1:8008/cors_demo/"></script> #src会发get请求,请求返回的内容会放到所在的script标签中,
+																	 #也就是src请求结果是: <script> handlerResponse('ok') </script>中,
+																	 #会去执行handlerResponse('ok'),ok传给handlerResponse,
+																	 #也就是说,不发ajax通过src也可以获取后端的数据. 缺点之一是后台的函数名和前端的函数名必须一致且不能发post请求也不能指定contentype
+																	 #以前用这种src获取后台数据来解决跨域问题的方式叫jsonP,现在不用了.
+																	 			
+			<script>         
+			 function handlerResponse(data) { 
+				 alert(data)   #这个data接收handlerResponse('ok')传来的ok,也就是说,不发ajax通过src也可以获取后端的数据
+			 }
+		</script>
+		
+	解决跨域问题:浏览器阻止跨域是因为ajax请求没有请求头,
+		
+		
+		
+		
+		
+		
+		
+					
+					
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+

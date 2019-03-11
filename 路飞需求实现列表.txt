@@ -1,0 +1,21 @@
+前端要实现:
+	导航栏  导航栏是公共组件,放在common目录下的luffyheader.vue中
+	轮播图
+	免费课程
+	点免费课程进详细课程 
+	购物车
+	登录页面
+	极验滑动页面
+	
+	前端请求数据然后数据渲染.后端用drf把json数据给前端.
+	
+	很多地方要用到<div class=container></div>,写成全局的css样式,写在static/global/index.css中
+	
+	组件之前传值可以用bus也可以用vuex. 
+	
+	路由放一个目录 接口放一个目录 组件放一个目录 资源放一个目录 解耦
+	
+	点购物车判断用户有没有登录,判断是否已登录从vue的cookie中判断,要用到vue-cookie插件.
+	用户登录后给用户token值,判断是否已登录就判断用户是否有token,如果没登录用编程时导航跳转到登录页面,
+	从login组件到courseDetail组件传值可以用bus也可以用vuex,我们用vuex.
+	

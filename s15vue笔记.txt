@@ -1,0 +1,1623 @@
+什么是vue:
+	vue是渐进式js框架,渐进式的意思是,没有太多限制,当前有很多框架比如angor,它是比较重的框架提供了一整套的框架会有很多限制必须要用它的组件.而vue是相反的,它可以使用vue的框架,也可以使用其他的库.
+	
+vue官方文档:https://cn.vuejs.org/v2/guide/
+
+使用vu.js:
+	1.下载到本地放入/static/再引入.  
+	2.直接引入<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+用vue首先实例化对象: 
+	new Vue(字典对象)  
+		字典对象:
+				{
+				el:'str',   #  el:elment 要绑定的元素,一定是html中的根容器元素.
+				data:{自定义键值对}, #data:用于存储的数据
+				methods:{方法名:方法体}  #用于存储方法.  data里面的是属性,methods里面的是方法 
+				}
+				------------------------
+			代码e.g:
+				<script>
+					new Vue({
+						el: '#div1',
+						data: {name: 'yfding', age: "18"}
+					})
+				</script>
+				------------------------
+			使用:
+				<div id="div1">
+					<p> {{ name }} </p>
+					<p> {{ age }} </p>
+				</div>
+				-------------------------			
+
+方法:
+	methods:{字典}  
+		字典:键值对,键为函数名,值为函数体
+		e.g
+	methods:{
+		morning:funcition(){return 'good morning'},  #在方法里面用this表示当前vue对象,例如this.name拿到name为yfding
+		aftrernoon:funcition(){return 'good aftrernoon'},
+		evening:funcition(){return 'good evening'},
+		
+		}
+		
+属性绑定v-bind:  如果不加v-bind 只能渲染出纯文本, 如果要加上跳转的效果要加上v-bind        
+	例如,data中有website:'www.baidu.com'
+	a标签中不能直接用href= {{ wesite }} 来取data中的属性webite,要在属性前加v-bind:href='website',点击的时候才有跳转到百度的效果. 如果只是渲染文本可用{{ wesite }}
+	
+
+v-html 把属性是标签的属性 渲染成标签,不加会显示纯文本
+	如果data中的一个属性是标签,如 baidu_tag:'<a href="www.baidu.com">百度</a>'
+	使用的时候加上v-html e.g  <p v-html="baidu_tag"> </p>	才能渲染出标签的样子 将渲染出的标签放在p标签了里面
+
+		
+事件v-on: 或@
+	标签里面加 v-on:click='函数名'
+	
+		    <div v-on:mousemove="updatexy" style="border: 1px red solid;height: 200px;width: 200px">
+				{{ x }} {{ y }}
+			</div>
+			
+			data: {
+					age: 18,
+					x: 0,
+					y: 0
+				},
+				methods:
+					{
+						add: function (e) {
+							this.age = this.age + e;
+						},
+						jianshao: function () {
+							this.age++
+						},
+						updatexy: function (e) {
+							this.x = e.offsetX;
+							this.y = e.offsetY;
+						}
+
+					}
+简写: v-on:简写为@ e.g   @click='函数名'
+	
+	
+函数修饰符:
+
+	
+键盘事件:鼠标弹起 鼠标按下 
+	<input type="text" @keyup="writeName">
+	1.当鼠标按下的时候执行writeName函数
+	 methods:
+            {
+                writeName: function (e) {
+                    console.log('正在输入姓名')
+                },
+
+
+            }
+	2.按下键盘enter键触发方法 @keyup.enter="函数名"
+	
+	
+双向数据绑定:
+	方法1. 用ref='属性名' 
+	方法2. 用v-model='属性名'
+	一定和select input 和textara有关  因为双向需要输入
+	实现效果:输入的时候,有对应的输出展示
+	在输入的地方加上ref='name'  代码中用this.$refs.name.value取值
+		<div id="div1">
+			<input type="text" ref="name" @keyup="writeName">{{ name }}
+		</div>
+		<script>
+			new Vue({
+				el: '#div1',
+				data: {
+					name: 'hello',
+				},
+				methods:
+					{
+						writeName: function () {
+							this.name = this.$refs.name.value;
+						},}})
+		</script>
+
+	
+	双向数据绑定可以不用ref='属性'vue中给我们提供了v-model='属性'
+	
+	
+计算属性:  列子没成功运行,再看看
+	方法和计算属性的不同  如果是方法,点a,a会执行,b也会执行,耗费性能.
+	computed计算属性, 使用的时候不加括号当做属性执行,代码: 适用于当前页面变化幅度较大的时候使用.
+	
+	
+动态绑定css:
+	没运行出来 
+	<div v-bind:class="" v-on:click="changeRed"> 动态绑定样式 </div>
+	
+条件渲染v-if:
+	下面的代码没运行成功,重试:
+				<div id="div1">
+					<button v-on:click="ChangError"> 切换error</button>
+
+					<!--如果error为true 显示这个标签 如果error为false,判断下面的else-if ,else-if中的tips为true显示出来,为false不显示-->
+					<p v-if="error">网络连接错误</p>
+					<p v-else-if="tips">提示信息.....</p>
+				</div>
+
+
+				<script>
+					new Vue({
+						el: '#div1',
+						data: {
+							error: true,
+						},
+						methods:
+							{
+								ChangError: function () {
+									error = !error    // 把红色样式取反 有变成没有  没有变成有
+
+								}
+
+							}
+					})
+				</script>
+				
+条件渲染:v-show
+	v-show和v-if的区别是,v-show 是隐藏,v-if是删除标签 其他的都一样
+	
+循环渲染v-for:遍历数组
+	方法1. 数组下标获取
+	方法2. errary1 是data中的一个数组
+			
+				
+				
+				
+实例化多个vue对象:
+	    let obj1 = new Vue({
+			el:'#d1',
+			data:{},
+			methods:{},
+			computed:{}
+		});
+		
+		let obj2 = new Vue({
+			el:'#d2',
+			data:{},
+			methods:{},
+			computed:{}
+		});
+		
+	如果在obj1中,要改obj2的属性: obj2.属性就可以了
+	
+	
+组件***: stop
+
+=================================================
+
+v-if:
+	    <button v-on:click="ChangError"> 切换error</button>
+		<!--如果error为true 显示这个标签 如果error为false,判断下面的else-if ,else-if中的tips为true显示出来,为false不显示-->
+		<p v-if="error">网络连接错误</p>
+		<p v-else-if="tips">提示信息</p>
+		</div>
+		
+		<script>
+			new Vue({
+				el: '#div1',
+				data: {
+					error: true,
+					tips:
+					
+				},
+				methods:
+					{
+						ChangError: function () {
+							error = !error   # 把error的值取反
+
+						}
+
+					}
+			})
+
+v-show:和v-if 的区别,v-show的不显示是display为none  v-if不显示是页面中没有这个标签.
+
+
+	
+v-for 遍历:
+	<ol>
+        <li v-for="todo in todos">{{ todo }}</li>
+    </ol>
+	
+	data: {todos:['a', 'b', 'c']},
+	
+v-bind:属性绑定.给标签的属性绑定vue的属性:当vue的属性变化,标签的属性值跟着变化
+	   #简写:
+	<input type="text" v-bind:value="name">	
+	data: {name:'alex111'}
+	 
+	 
+v-html:表示这里的vue属性内容正常渲染不转义.
+	 <p v-html='vue属性名websiteTag'> </p>  # 会在页面上生成一个超链接
+	 
+	 data: {websiteTag:' <a href="www.baidu.com">点我到百度</a>'},
+		
+	
+v-on事件:简写@
+	v-on:click="函数名(参数)"  
+	v-on:click="无参的函数名"
+	#简写为@click="函数名"
+	
+
+事件修饰符:
+		.stop
+		.prevent
+		.capture
+		.self
+		.once
+		.passive
+
+		<!-- 阻止单击事件继续传播 -->
+		<a v-on:click.stop="doThis"></a>  #a标签绑定了doThis事件,阻止这个事件
+
+		<!-- 提交事件不再重载页面 -->
+		<form v-on:submit.prevent="onSubmit"></form>
+
+		<!-- 修饰符可以串联 -->
+		<a v-on:click.stop.prevent="doThat"></a>
+
+		<!-- 只有修饰符 -->
+		<form v-on:submit.prevent></form>
+
+		<!-- 添加事件监听器时使用事件捕获模式 -->
+		<!-- 即元素自身触发的事件先在此处理，然后才交由内部元素进行处理 -->
+		<div v-on:click.capture="doThis">...</div>
+
+		<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+		<!-- 即事件不是从内部元素触发的 -->
+		<div v-on:click.self="doThat">...</div>
+		
+		#<!-- 点击事件将只会触发一次 -->
+		<a v-on:click.once="doThis"></a>
+
+		使用修饰符时，顺序很重要；相应的代码会以同样的顺序产生。因此，用 v-on:click.prevent.self 会阻止所有的点击，而 v-on:click.self.prevent 只会阻止对元素自身的点击。
+
+		
+键盘事件:键值修饰符
+		在监听键盘事件时，我们经常需要检查常见的键值。Vue 允许为 v-on 在监听键盘事件时添加按键修饰符：
+		<!-- 只有在keyCode是 13 时调用vm.submit() -->
+		<input v-on:keyup.13="submit">
+		
+		记住所有的 keyCode 比较困难，所以 Vue 为最常用的按键提供了别名：
+		#input框中按下enter键的时候执行submnit
+		<input v-on:keyup.enter="submit">  
+		<!-- 缩写语法 -->
+		<input @keyup.enter="submit">
+		
+		#支持链式: 同时按下alt和enter才触发submit事件
+		<input v-on:keyup.alt.enter="submit">  
+		
+		
+		全部的按键别名：
+		.enter
+		.tab
+		.delete (捕获“删除”和“退格”键)
+		.esc
+		.space
+		.up
+		.down
+		.left
+		.right
+		
+		可以通过全局 config.keyCodes 对象自定义按键修饰符别名：
+		#可以使用 v-on:keyup.f1
+		Vue.config.keyCodes.f1 = 112
+
+
+双向数据绑定v-model: 将标签值作为某个vue属性的数据源.
+	初始的时候将vue属性的值绑定到标签值中,当改变标签值的时候vue属性值跟着变化
+	一定和input select  textare有关  因为需要输入和输出	
+	#将文本框的输入做为msg的数据源. 文本框中输入什么,msg属性跟着变化
+	<input type="text" id="t1" v-model="msg">  
+	<span>{{ msg }}</span>
+	
+	
+计算属性computed:
+	计算属性没听懂
+	
+
+实例化多个vue对象:
+		<div id="div1">
+			<p> {{ name }} </p>
+		</div>
+
+		<div id="div2">
+			<p> {{ name }} </p>
+		</div>
+
+		<script>
+			var obj1 = new Vue({
+				el: '#div1',
+				data: {name: 'alex1'},
+				methods:
+					{}
+			});
+			var obj2 = new Vue({
+				el: '#div2',
+				data: {name: 'alex2'},
+				methods:
+					{}
+			})
+		</script>
+		=========================================>
+		如何在一个vue对象中,改变另一个vue对象的内容? 用对象名.属性='xxx'
+			例如:在第一个vue对象中定义方法:
+			    methods:
+						{changeTwoname:function () {
+								obj2.name='2alex'  #把第二个vue对象的属性改掉
+							}}
+				});
+		=========================================>
+	
+
+组件:
+	组件的使用:三步: 声明--挂载---使用
+		1.声明子组建.  let 组件名 = {实例化对象的内容除了el的内容,其他都有}							
+		2.挂载到父组件或vue对象上. e.g components: { Home } . 挂载后就可以在template中使用
+		3.使用子组件. e.g <Home/>	
+		
+			例如:
+				<body>
+				<div id="div1">
+				</div>
+
+				<script>
+					
+					let Home = {   # step1 声明子组件Home
+						data() {
+							return {name: 'Home组件的内容alex123'}
+						},
+						template: `<div>{{ name }}</div>`  #子组件的内容
+					};
+
+					new Vue({  # vue对象
+						el: '#div1',
+						data() {
+							return {msg: 'alex'}
+						},
+						methods:
+							{},
+						 
+						template: `<div >
+								<Home/>   # step3  使用子组件.用闭合标签使用子组件或者 组件名:组件名
+					  </div>`,
+						components: { Home } #step2  把子组件挂载到vue对象的components属性中
+					})
+				</script>
+	
+	注意:
+		如果vue对象中有template，如果template中定义模板的内容优先级大于el
+		组件名大写
+		组件的data必须是一个函数. 这么做是为了每个实例可以维护一份被返回对象的独立的拷贝.否则组件复用的时候data中的属性会乱.
+		把子组件挂载到另一子组件中的方法 和 把子组件挂载到对象中一样.  组件中除了没有对象中的el,其他的都有.
+		tempate中内容一定要用一个容器包裹起来.例如用div包裹.
+		
+		
+	在一个对象/父组件中注册多个组件:
+		=====================================>
+		new Vue({
+			el: '#div1',
+			data() {
+				return {msg: 'alex'}
+			},
+			methods:
+				{},
+			
+			template: `<div >
+					<Home/>   #在这个对象中使用这3个组件
+					<Foot/>
+					<Head/>
+
+		  </div>`,
+			components: {Home, Foot, Head}  #在这个对象中注册3个组件
+		})
+		=====================================>
+		
+		
+全局组件:
+	声明:
+		Vue.component('组件名', {
+			  //options  e.g data,methods,template,components
+			})
+			
+	使用:全局组件是全局的,不需要挂载,在任何组件中直接使用
+	
+	例如:
+			<script>
+				Vue.component('overall_comp', {   # 定义全局组件
+					   data() {
+						return {name: '这是全局组件'}
+					},
+					template: `<div>{{ name }}</div>`
+				});
+
+				let Foot = {  # 定义局部组件
+					data() {
+						return {name: '子组件Foot组件的内容'}
+					},
+					template: `<div>{{ name }}</div>`
+				};
+
+				new Vue({
+					el: '#div1',
+					data() {
+						return {msg: 'alex'}
+					},
+					methods:
+						{},
+
+					template: `<div >
+							<overall_comp/>  #全局组件直接使用无需注册
+							<Foot/>
+				  </div>`,
+					components: {Foot}  # 注册局部组件,全局组件不用注册
+				})
+			</script>
+
+slot: # slot是vue提供的内置组件 slot就像一个占位符 调用者的内容替换slot的位置  
+	例如:
+		Vue.component('overall_comp', {
+			   data() {}
+			},
+			template: `<div> <button> <slot> </slot> </button>  </div>`  # slot是vue提供的内置组件  调用者的内容替换slot的位置  slot就像一个占位符
+		});
+		
+		
+		 new Vue({
+			el: '#div1',
+			data() {}
+			},
+			methods:
+				{},
+
+			template: `<div >
+					<overall_comp>登录 </overall_comp>  # '登录'会替换上面<slot> </slot>的位置 结果就是button上显示登录
+					<overall_comp>注册 </overall_comp>  # button上显示注册
+					<overall_comp>注销 </overall_comp>	# button上显示注销
+		  </div>`,
+			components: {Foot}
+		})
+
+
+父组件往子组件传值:
+		step1:父组件中,用v-bind给子组件绑定属性msg  子组件通过msg取值
+		step2:子组件中在props['msg']里面,通过msg属性接收值,然后使用{{msg}}
+		
+		例如:
+			<script>
+			
+				let Foot = {
+					data() {
+						return {name: '子组件Foot的name'}
+					},
+					props:['msg'], # 子组件中在props里面,通过msg属性接收值
+					template: `<div>{{ msg }} </div>`
+				};
+
+				new Vue({
+					el: '#div1',
+					data() {
+						return {name: '父组件的name'}
+					},
+					methods:
+						{},
+											
+					template: `<div >
+						  <Foot v-bind:msg='name'> </Foot>  #父组件中,用v-bind给子组件绑定属性msg  子组件通过msg取值
+
+				  </div>`,
+					components: {Foot}
+				})
+			</script>
+
+
+属性或方法前加$,表示这是vue的内置方法或熟悉, e.g $.emit
+
+
+子组件往父组件传值:不会 day84
+		1、子组件中 通过$emit()触发父组件中自定义的事件
+
+		2、父组件中声明自定义的事件介绍	
+
+
+
+平行组件传值: 两个没关系的组件之间传值
+	接收数据的组件声明$on方法
+	传数据的组件声明$emit方法   将$on 和$emit 都挂载到一个独立的对象上,
+	
+	bus 公交车对象：绑定 on和emit
+	let bus = new Vue();
+	
+	A=>B 传值
+	A:$emit('函数名'，值)==> B:$on(’函数名‘,()=>{})
+
+	
+	例如:
+		a向b传  传递者触发$emit('事件名',要传的值)  接受者定义$on('a的事件名',函数体)    
+		这2个方法必须绑定在同一个对象中
+	
+	
+		<script>
+			let bus = new Vue();  #声明一个bus对象,这是所有组件公共的对象,用来传递数据
+
+			let Sub1 = {
+				data() {
+					return {}
+				},
+				template: `<button @click='clickHander'>sub1传递</button> `,
+				methods: {
+					clickHander() {
+						bus.$emit('changeName', 'sub1传来的数据')   #传递者触发$emit('接受者的函数名','传递的数据')
+					}
+				}
+			};
+
+			let Sub2 = {
+				data() {
+					return {name: '子组件2的内容'}
+				},
+				template: `<div>{{ name }}</div>`,
+				created() {
+					bus.$on('changeName', (val) => {   #接受者定义$on('函数名',函数体)
+						this.name = val;               #用箭头函数,this表示调用者所在的类,若用function this是bus, 不是sub2的对象.
+					})
+				}
+			};
+
+			new Vue({
+				el: '#div1',
+				data() {
+					return {msg: 'alex'}
+				},
+				template: `<div >
+					  <Sub1> </Sub1>
+					  <Sub2> </Sub2>
+			  </div>`,
+				components: {Sub1, Sub2}
+			})
+		</script>
+	
+
+过滤器: 1.局部过滤器(当前组件中用)  
+	    2.全局过滤器(所有组件中都能用)  只要过滤器一创建，在任何组件中都能使用
+		局部过滤器
+
+		1.注册局部过滤器 在组件对象中定义
+			filters:{
+				'过滤器的名字':function(value){
+				}   
+			}
+			
+			使用: 使用管道符 | 
+				{{price  | '过滤器的名字'}}
+		
+		
+		2.全局过滤器 Vue.filter('名称',函数体)
+		   第一个参数是过滤器的名字，第二个参数是执行的操作
+			Vue.filter('reverse',function(value) {    
+				return value.split('').reverse().join('');
+			});
+
+			使用跟局部过滤器一样
+			
+			
+		例如:
+			<body>
+			<div id="div1">
+				{{ name | addHello }}  #使用过滤器
+			</div>
+			<script>
+				new Vue({
+					el: '#div1',
+					data() {
+						return {name: 'alex'}
+					},
+					methods:
+						{},
+					filters: {   # 定义过滤器
+						'addHello': function (val) {
+							return 'hello:' + val;
+						}
+					}
+				})
+			</script>
+		
+	
+生命周期的钩子函数:
+	生命周期:
+		- beforeCreate
+		- created #组件对象创建完成,还没渲染出来  ***
+		- 虚拟DOM  React
+		- 发送ajax 获取数据 实现数据驱动视图
+		- beforeMount
+		- mounted # 将所有组件和模板渲染到页面上 ***
+		- 获取真实DOM
+		- beforeUpdate
+		- updated
+		- activated 激活当前组件
+		- deactivated
+		- keep-alive Vue提供的内置组件，主要作用，让组件产生缓存
+		- deactivated 停用当前组件
+		- beforeDestroy
+		- destroyed #应用: 如果开了定时器，在destroyed中关闭定时器
+		
+		
+	钩子函数:
+		beforeCreate(){
+		#组件创建之前
+		console.log(this.msg);},
+
+		created(){
+			# 组件创建之后
+			# 使用该组件，就会触发以上的钩子函数，created中可以操作数据，发送ajax,实现数据驱动视图. 应用：发送ajax请求
+			console.log(this.msg);	
+
+		beforeMount(){
+			# 挂载前 还没渲染 装载数据到DOM之前会调用
+			console.log(document.getElementById('app'));},
+
+		mounted(){
+			# 这个地方可以操作DOM  操作真实的DOM
+			# 装载数据到DOM之后会调用 可以获取到真实存在的DOM元素，vue操作以后的DOM
+			console.log(document.getElementById('app'));},
+
+		beforeUpdate(){
+			# 在更新之前，调用此钩子，应用：获取原始的DOM
+			console.log(document.getElementById('app').innerHTML);},
+
+		updated(){
+			# 在更新之后，调用此钩子，应用：获取最新后的DOM
+			console.log(document.getElementById('app').innerHTML);},
+
+		beforeDestroy(){
+			console.log('组件销毁前');},
+
+		destroyed(){
+			console.log('组件销毁后');},
+
+		activated(){   #激活
+			console.log('组件被激活了');},
+
+		deactivated(){  #停用
+			console.log('组件被停用了');}
+			
+			
+		
+		当一个操作频繁的时候,频繁创建和销毁组件消耗性能,<keep-alive>内置组件能让当前组件销毁的时候内容全部缓存起来, 下次再创建的时候只需激活不用再重新创建.
+		e.g <keep-alive> <Component1 v-if='isShow'> </keep-alive>  当isShow为false的时候,组件Component1不会销毁,而是缓存起来,当isShow为true的时候,组件激活.
+		
+		
+		虚拟dom中使用diff算法.
+
+
+vue基本知识小总结:
+		模板语法{{ }}	 
+
+		指令系统
+			v-text
+			v-html
+			v-show和v-if
+			v-bind和v-on
+			v-for
+			v-model  双向数据绑定
+			
+		Vue中的常用属性
+			data:function(){}
+			el
+			methods
+			watch
+			computed
+			template
+			
+		Vue的常用方法
+			生命周期中的那些钩子函数
+			
+		Vue的过滤器
+			局部和全局的过滤器
+
+		Vue的组件
+			全局组件
+				Vue.component('组件的名字',{ options...	 					
+				})
+
+			局部组件
+				1. 声明组件  let 组件名 = {对象的内容除了el,其他都有}	
+				2. componets属性中挂载  
+				3. 当做标签使用
+
+		组件的传值
+			父=》子
+			子=》父
+			平行组件传值
+
+
+Vue的全家桶(KFC)== vue基础语法 + vue-router + vuex
+	vue+vue-router 主要用来做单页面应用SPA（Single Page Application） 
+		为什么要使用单页面应用？
+			传统的路由跳转如果后端资源过多，会导致页面出现白屏现象，让前端来做路由，在某个生命周期的钩子函数中发送ajax，数据驱动。为了提高用户体验
+			e.g  路飞就是单页面应用  稀土掘金也是单页面应用
+		
+		路由让前端控制,后台只给前端数据
+
+		vue-router是vue的核心插件. 使用vue-router依赖于vue.也就是说要用vue-router先要有vue.
+		下载vue-router 在vue官网--生态系统中找到vue-router
+		CND资源:<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+	
+	
+ps: 如果使用模块化机制编程，导入的Vue和VueRouter都是局部的,要调用 Vue.use(VueRouter)才能在全局使用	
+
+
+vue-router简单使用:	
+	例如:点首页显示首页,点免费课程显示免费课程
+		<div id="div1">
+		</div>
+
+		<script>
+			const Home = {  #定义组件Home
+				data() {
+					return {}
+				},
+				template: `<div>我是首页</div>`
+			};
+			const Course = {   #定义组件Course
+				data() {
+					return {}
+				},
+				template: `<div>我是免费课程</div>`
+			};
+			#创建路由对象
+			const router = new VueRouter({
+				#定义路由规则
+				routes: [
+					{
+					  path:'/',   # 匹配到'/'
+					  redirect:'/home'  # 跳转到/home
+					},
+					{
+						path: '/home', # 匹配到'/home' 
+						component: Home  # 加载Home组件,渲染到<router-view>的位置
+					},
+					{
+						path: '/course',  # 匹配到'/course' 
+						component: Course   # 加载Course组件,渲染到<router-view>的位置
+					}
+				]
+			});
+			let Comp1 = {  # 定义组件Comp1
+				data() {
+					return {}
+				},
+				#router-link和router-view 是vue-router 提供的两个全局组件  router-link渲染成a标签  to属性渲染成href属性
+				# router-view 是路由组件的出口,就是匹配到的组件要放的位置  
+				# 路由处理流程:点首页的时候,根据href跳转到/home, 路由对象中'/home'匹配到component:Home--加载Home组件, 渲染到<router-view>的位置
+				template: `
+					<div>
+						<div class="header">
+							<router-link to = '/home'>首页</router-link>
+							<router-link to = '/course'>免费课程</router-link>
+						</div>
+						<router-view></router-view> #router-view是路由匹配到的组件放的位置
+					</div>
+				`
+			}
+			new Vue({
+				el: '#div1',
+				router:router,  #挂载路由对象
+				data() {
+					return {}
+				},
+				template: `<Comp1 />`, #使用组件
+				components: {
+					Comp1   #注册组件
+				}
+			})
+		</script>
+
+
+命名路由和动态路由匹配:
+	命名路由:
+		定义: 在router对象的routes属性中:
+			routes: [
+				{
+					path: '/home', 
+					name:'to_home', # 给这条路由起别名name为to_home
+					component: Home
+				},]
+				
+		使用:
+			<router-link :to = '{name:"to_home"}'>首页</router-link>  #使用的时候 v-bind:to='{name:'别名'}'
+                    
+
+	动态路由匹配:在url中输入/user/1  /user/2  匹配同一个组件
+		/user/1 和/user/2都将映射到相同的路由
+		当使用路由参数的时候,例如从/user/1 导航到/user/2,不是销毁再创建新组件,而是原来的组件实例会被复用(理解为将原来的组件缓存了),因为两个路由都渲染同一个组件,比起销毁再创建,复用则显得更高效.不过这也意味着组件的生命周期钩子不会再被调用. 复用组件的时候,如果想对路由参数多的变化做出相应可以用watch监测$route变化. 监听路由信息对象,只要路由变化,
+		
+		举例,点击用户1和用户2的时候,url分别是/user/1和/user/2,都是显示Home组件
+			部分代码:
+				{
+					path: '/home/:id',  #匹配规则
+					name:'to_home',     #这条路由的别名
+					component: Home     #理由对应的组件
+					},
+				.....	
+				template: `
+					<div>
+						<div class="header">
+							<router-link :to = '{name:"to_home",params:{id:1}}'>首页1</router-link>
+							<router-link :to = '{name:"to_home",params:{id:2}}'>首页2</router-link>
+						</div>
+						<router-view></router-view>
+					</div>
+		=============================================>	
+		$route 路由信息对象
+		$router 路由对象 VueRouter
+		
+		watch: {
+		'$route'(to, from) {   # to路由从哪来  from路由去哪里
+			# 对路由变化作出响应...
+			console.log(to); # 当前路由信息对象
+			console.log(from);
+			}
+		}
+			
+	动态路由举例:
+		const User = {
+			data() {
+				return {
+					user_id:null
+				}
+			},
+			template: `<div>我是用户{{ user_id}}</div>`,
+			created() {
+				console.log(this.$route); #路由信息对象
+		# 当使用路由参数时，例如从 /user/foo 导航到 /user/bar，原来的组件实例会被复用。因为两个路由都渲染同个组件，比起销毁再创建，复用则显得更加高效。
+		# 不过，这也意味着组件的生命周期钩子不会再被调用。
+			},
+			watch: {  # 监听路由信息对象
+				'$route'(to, from) {
+					# 对路由变化作出响应
+					console.log(to.params.id);
+					console.log(from);
+					this.user_id = to.params.id;
+					# 发送ajax
+				}
+			}
+		}
+
+		# 创建路由
+		const router = new VueRouter({
+			//定义路由规则
+			routes: [
+				{
+					path: '/user/:id',
+					name: 'User',
+					component: User
+				}
+			]
+		})
+			let App = {
+				data() {
+					return {}
+				},
+		# router-link和router-view 是vue-router 提供的两个全局组件
+		# router-view  是路由组件的出口
+				template: `
+					<div>
+						<div class="header">
+							<router-link :to = '{name:"User",params:{id:1}}'>用户1</router-link>
+							<router-link :to = '{name:"User",params:{id:2}}'>用户2</router-link>
+						</div>
+						<router-view></router-view>
+					</div>`}
+			new Vue({
+				el: '#app',
+				//挂载 路由对象
+				router,
+				data() {
+					return {}
+				},
+				template: `<App />`,
+				components: {
+					App
+				}
+			})
+		</script>
+	
+
+编程式导航:vs声明式导航
+	声明式导航:通过router-link链接到某个地址
+			<router-link :to = '{name:"Home"}'>首页</router-link>
+			<router-link :to = '{name:"Course"}'>免费课程</router-link>
+
+
+	编程式导航:通过绑定事件,事件里 this.$router.push({name:"Home"})  在router里推送Home组件
+		部分代码:
+			    const Home = {
+					data() {
+						return {}
+					},
+					template: `<div>我是首页</div>`
+				}
+				const User = {
+					data() {
+						return {
+							user_id: null
+						}
+					},
+				 template: `<div>我是用户{{ user_id}}
+					<button @click = 'clickHandler'>跳转首页</button>  # step1.点击触发事件clickHandler
+
+							 </div>`,
+					created() {
+						console.log(this.$route);
+					},
+					methods:{
+						//编程式导航
+						clickHandler(){   # step2.事件中,this.$router.push({name:"Home"})  推送Home组件,然后就会找到Home组件显示到页面上
+							this.$router.push({
+								name:"Home"
+							})
+						}
+					},
+	练习:搭建路飞的首页和免费课程:
+		在组件的create()方法中发ajax请求,从后台获取菜单内容放到data的categoryList[]中,然后循环categoryList显示出来.
+
+
+小总结:
+	生命周期钩子函数
+	- beforeCreate
+	- created .组件创建完成后，可以发起ajax（XMLHttpRequest 简称XHR  axios  fetch  $.ajax()）请求,实现数据驱动视图
+	- beforeMount
+	- mounted .DOM挂载完成后
+	- beforeUpdate. dom更新前,获取原来的DOM
+	- updated . dom更新后,获取更新后的DOM
+	- beforeDestory. 组件销毁之前
+	- destoryed. 组件销毁之后
+	- activated .  激活当前组件   vue提供的内置组件<keep-alive></keep-alive>让组件停用而不是销毁.
+	- deactivated .停用当前组件
+
+
+	vue-router是核心插件. 主要作用:实现单页面应用,提高用户体验
+
+
+	使用模板:vs使用前后端分离
+		好处：减少DOM操作
+		不好处：后期不易维护		
+	使用前后端分离：
+		分工明确
+		前端只做前端的事情（页面+交互+兼容+封装 +class+优化）  vue+vue+router+vuex+axios+element-ui
+		后端只做后端的事情（接口（表的操作+业务逻辑+封装 +class+优化））restframework 框架 +django +sqlite + redis
+
+
+	使用vue-router步骤:
+		1.下载vue-router的js文件到本地,或用 CDN
+		2.引包 先引vue,再引vue-router.  因为vue-router依赖vue
+		3.如果是模块化机制 需要Vue.use(vue-router)
+		4.创建路由对象:
+				let Home = {/*..Home组件..*/} 
+				const router = new VueRouter({ #1.创建路由对象
+				 # 2.配置路由信息
+					routes:[
+						{
+							path:'/',
+							redirect:'/home'
+						},
+						{
+							path:'/home',  # 匹配规则
+							name:'Home',   # 这条路由的别名
+							component:Home # path中规则对应的组件
+						}
+					]
+				})
+				new Vue({
+					# 3.挂载router对象到vue的实例中
+					router  #等价于router:router
+				})
+
+
+	使用路由:	
+		<div>			
+			<router-link to = '/'>首页</router-link>  #	router-link默认被渲染成a标签 to属相会被渲染成href
+			<router-link :to = '/home' @click.native = ''>首页</router-link>
+			 <router-view></router-view>  #  router-view路由组件的出口,就是路由组件要放的位置		  
+		</div>
+		
+	动态路由匹配:
+			从/user/1 跳转到/user/2  加载的是同一个组件
+			主要代码:
+				routes:[
+				{
+					path:'/user/:xx',
+					name:'User',
+					component:User
+				}
+				]
+				#使用:
+				 <router-link :to = '{name:"User",params:{xx:"front"}}'>前端</router-link>
+				 <router-link :to = '{name:"User",params:{xx:"ios"}}'>IOS</router-link>
+				 
+			从/user/1到/user/2组件会复用不会销毁,所以有些钩子函数不会执行,可以用watch监听路由的变化:
+					watch: {
+						'$route':(to,from)=>{
+							#to 要去的页面的路由信息对象
+							#from 从哪个路由信息对象中来
+						}
+					}
+	编程式导航: 通过点击触发事件,事件里面执行的函数中: this.$router.push({name:"Home"}) --#推送显示Home组件
+			
+			主要代码:
+				<button @click = 'clickHandler'>跳转首页</button>  # step1.点击触发事件clickHandler
+				methods:{
+						//编程式导航
+						clickHandler(){   # step2.clickHandler方法中,this.$router.push({name:"Home"}) 推送Home组件显示到页面上
+							this.$router.push({
+								name:"Home"
+							})
+						}
+					},
+					
+	vue-router提供的内置的内容:
+		router-link
+		router-view
+		this.$route 路由信息对象  可以通过this.$route获取地址栏的信息,比如path, parms,
+		this.$router 路由对象 e.g this.$router.push({name:"Home"}) --#推送路由对象中的别名是Home对应的组件
+
+
+
+
+获取原生的DOM的方式: ***
+		原生的js提供的获取dom的方法是documnet.getElementById(..),Vue给我们提供了简便的方法: 用ref属性.  ps:ref=reference关联,引用的意思
+		1.先给标签或者组件添加ref属性,
+		2.然后通过this.$refs.ref值 获取到这个对象
+		例如:
+			<div ref = 'alex'>哈哈哈</div>
+			<Home ref = 'b'></Home>
+			this.$refs.alex -- 获取原始的DOM对象
+			this.$refs.b --获取组件对象
+			=============================>
+			部分代码:			
+			    Vue.component('Test1',{
+					data(){return {}},
+					template:`
+						<div>我是测试组件</div>
+					`})
+					
+				  Vue.component('Test2',{
+					data(){return {}},
+					template:`
+						<div>我是测试组件2</div>
+					`})
+				
+				let App = {    			#组件App中有2个子组件Test1和Test2
+				data(){return {}},
+				template:`
+				   <div>
+						<input type="input_username" ref = 'input'>
+						<Test1 ref = 'abc'/>
+						<Test2 ref = 'efg'/>
+					</div>`,
+					
+				mounted(){
+					this.$refs.input_username.focus();  #组件加载后,让input框获取焦点
+					console.log(this.$refs.input_username); #获取原始DOM
+					console.log(this.$refs.abc); #获取组件对象
+					console.log(this.$refs.abc.$parent);#获取当前组件对象的父组件App
+					console.log(this.$refs.abc.$root); #root是vue对象v1
+					console.log(this.$children); #是[],获取子组件: 这里是[Test1,Test2]
+					for(let key in this.$refs){  #遍历所有有ref属性的dom或组件
+					  console.log(  this.$refs[key]);
+					}}}
+				let v1=new Vue({
+						el:'#app',
+						data(){return {}
+						template:`<App />`,
+						components:{
+							App #挂载组件App到vue对象上.
+						}})
+				</script>
+
+
+http://yeoman.io/ 有前端里面各种语言的脚手架,vue的脚手架,jquery的脚手架等等.
+脚手架vue-cli,就是,给你准备好梯子好工具,你只需要写功能的代码html,css,js.
+vue是组件化开发.一个页面由组件嵌套形成.是一个组件树.
+
+
+s14补充:
+	虚拟dom,先占位置,mounted之后dom生成到指定位置.
+	非单页面应用是render了很多个html页面,单页面应用始终只给用户显示一个html页面,通过路由控制页面上展示的不同的组件,让页面看似变了,实际上一直是同一个页面. 通过点击事件让vue展示不同的组件. 例如点击轻课触发事件,事件里面push轻课的那个组件展示.
+	有了路由才能实现单页面应用.因为有路由才能找到url对应的组件.
+
+	path:'/course/:id'
+	this.$route.params.id 拿到路由后的id
+	
+	$route: 是对象,放当前路由的所有信息,{path:xx,id:xx,params:xx,meta:xx}	
+	$router: 是vue路由对象 有vue-router所有内置方法  截图在word里面
+	手动路由:this.$router.push({name:'home',params:{id:1}})
+	
+	重定向redirect: {name:'xxx'}  或'/home'
+	路由的钩子:
+		router.beforeEach(function(to,from,next)){}   # to去哪里,form从哪来,next要做什么
+		router.afterEach(function(to,from)){}
+
+
+node.js 是本地解析js语言的解释器  就像下载pyhton解释器本地解析python语言
+npm下载  就像pip. 
+node.js和npm的关系就像python和pip的关系.
+npm下载的是前端的依赖包,比如vue,js,bootstrap,jqury,
+npm和pip不同的是,npm能帮我们独立管理目录,
+
+	用npm帮我们管理目录的步骤:
+		1.在pychrm建一个目录,例如npm-demo
+		2.在terminal中运行命令npm init -y  表示用nmp管理这个目录
+		3. 用npm下载文件, 例如下载juqery: npm install jquery
+		截图在word中.
+
+
+	npm常用命令:
+		管理工作目录:npm init -y 
+		下载包: npm i xxx@哪个版本   #下载的文件在node_modules目录下
+		卸载:npm unistall xxx
+		更新:npm updata xxx
+		
+	webpack:把代码打包压缩上线,或者提高兼容性,例如把js5兼容js
+	vue-cli脚手架就是一个工具,只有一个目的:帮我们快速搭建项目
+
+
+webpack:
+	是前端工具:webpack是js应用程序的静态模块打包器.当webpack处理应用程序时,会递归的构建一个依赖关系图,其中包含应用程序需要的每个模块,                  然后将这些模块打包成一个或多个bundle.
+	
+	https://www.webpackjs.com/ 
+	安装wenpack : npm i webpack@3.12.0 -g
+	webpack: webpack打包所有资源
+			把项目所有js/css/png文件打包成一个js/css/png文件输出						
+			
+	webpack特性:
+		1. webpack不在单独使用，需要webpack-cli
+
+		　　-- 全局安装  npm install webpack webpack-cli -g -D
+
+		　　-- 局部安装  npm install webpack webpack-cli -D
+
+		2. 增加了模式区分 （development开发模式, production生产模式）
+
+		　　打包:webpack --mode development/production 
+
+		　　-- development 开发者模式 打包默认不压缩代码
+
+		　　-- production  生产者模式 上线时使用，压缩代码。 默认是这个模式
+
+		3. 固定入口目录为src下的index.js，所以我们要新增src目录和index.js文件
+		   打包后文件在新增的dist目录下
+		　　-- 当只有一个入口文件也就是src/index.js时，无需增加webpack.config.js
+			
+		js的导入和导出,js要导入,必须要先export导出, 即先导出了才能导入
+			抛出export {变量,或函数名}  e.g export {name, func1}
+			抛出后需要导入的地方才能导入 import {变量,函数名} from '从哪个js文件'
+			导入后就和正常的变量和函数一样使用.
+			
+			
+		js导入和导出举例:
+			step1. 在my.js中写变量和函数并导出:
+				var name = 'yfding';
+				function func1() {
+					alert('my name is yfding')
+				}
+				export {name,func1}  # export{变量名或函数名}
+				
+			step2: 在index.js中导入:
+				import {name,func1} from "./my_js";   #import导入
+				alert(name);  #使用
+				func1()  #使用
+				
+			step3: 在html文件中导入'dist/main.js'就可以是用my.js. 因为打包后的js文件在dist目录下.
+					前提先要打包webpack --mode development
+					
+	export VS export default:
+		export default只能导出一个变量名或函数名
+			e.g export default age.
+			导入的时候import 任意名如abc from '目录'
+			那么,使用这个abc 就等于使用age  console.log(abc)  就等于console.log(age) 
+
+
+**webpack最后打包完的项目,就一个index.html的html文件,里面有html,js	
+	
+	
+cli:	
+	cli里面自带webpack.
+	我们用的是cli2,安装cli2的命令:npm install -g vue-cli,
+			  cli3安装命令有点不一样:npm install -g @vue/cli
+			  如果报错 npm error 可以运行: npm cache clean --force && npm cache verify
+	
+vue-cli:是快速构建单页面应用的脚手架。
+	
+	使用vue-cli搭建项目流程:****
+	　　-- 前提已经安装了vue 和 node.js,否则npm都用不了
+		1. cd到项目目录, nmp init -y  先管理目录
+		2. 用vue-cli帮助我们创建项目: vue init webpack luffy_yf  #创建名为luffy_yf的项目
+		3. 启动项目: 先cd到项目目录下:cd luffy_yf, 然后启动项目:npm run dev
+			   ps:npm run dev的脚本就是项目名下的static下的package.json文件中的内容.
+	　　　　　　　　　　　　
+
+		创建项目后自动生成目录结构：
+
+		　　-- build 里面是一些操作文件，使用npm run * 时其实执行的就是这里的文件
+
+		　　-- config 配置文件，执行文件需要的配置信息
+
+		　　-- src 资源文件 所有的组件以及所有的图片 都在这个文件夹下.里面的main.js是入口文件.
+
+		　　-- node_modules  项目依赖包
+
+		　　-- static 静态资源
+
+		　　-- package.json   依赖包的json文件
+
+			其实这里面命令很多~我们在后续项目中应用到再说
+			
+		vue项目就一个index.html页面
+		
+		
+s14-day86-11
+scped 表示当前样式只对当前模板有效
+	例如在App.vue中写
+		<style>
+		  h2{
+			color: green;
+		}
+		那么,Home.vue和Light_course.vue中颜色也变了
+		
+	而加上scoped表示当前样式只对当前模板有效
+		e.g <style scoped>
+			  h2{
+				color: green;
+			  }
+		
+		
+import MyHeader from '@/components/MyHeader'---中的@是resove('src')在拼路径,在build目录下的webpack.base.conf.js中有配置:
+		alias: {
+			  'vue$': 'vue/dist/vue.esm.js',
+			  '@': resolve('src'),
+			}
+		
+		function resolve (dir) {
+		  return path.join(__dirname, '..', dir)
+		}
+		
+		
+插件:vue-cookie   localStorage基于cookie
+今日内容:
+	权限控制 例如路飞学城点击只能题库跳转到登录页面
+	axios
+	
+	
+	
+axios:类似jq的ajax
+	https://www.kancloud.cn/yunye/axios/234845
+	axios是一个基于promise的HTTP库,可以用在浏览器和node.js中.  ps:promise是es6的一个语法.
+	安装:
+		用 npm安装:
+		$ npm install axios
+		用 bower安装:
+		$ bower install axios
+		用 cdn:
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		
+		
+	应用举例:
+		#执行 GET 请求
+		// 为给定 ID 的 user 创建请求
+		axios.get('/user?ID=12345')  #get里面是请求的url
+		  .then(function (response) {  #then 是成功的回调函数
+			console.log(response);
+		  })
+		  .catch(function (error) {  #catch是失败的回调函数
+			console.log(error);
+		  });
+		  
+		  
+		 # 可选地，上面的请求可以这样做
+		axios.get('/user', {
+			params: {
+			  ID: 12345
+			}
+		  })
+		  .then(function (response) {
+			console.log(response);
+		  })
+		  .catch(function (error) {
+			console.log(error);
+		  });
+	
+		#执行 POST 请求
+		axios.post('/user', {
+			firstName: 'Fred',  #请求体数据
+			lastName: 'Flintstone'
+		  })
+		  .then(function (response) {
+			console.log(response);
+		  })
+		  .catch(function (error) {
+			console.log(error);
+		  });
+		
+		#执行多个并发请求
+		function getUserAccount() {
+		  return axios.get('/user/12345');
+		}
+		function getUserPermissions() {
+		  return axios.get('/user/12345/permissions');
+		}
+
+		axios.all([getUserAccount(), getUserPermissions()])
+		  .then(axios.spread(function (acct, perms) {
+			// 两个请求现在都执行完成
+		  }));		
+		  
+	如何使用axios?
+		将axios挂载到vue的prototype上,那么各个组件都能使用.因为面向对象	
+		在项目的导入:
+			import Axios from 'axios'
+			Vue.prototype.$https.Axios
+		
+	#用axios干什么?
+		用axios发请求,获取路飞的数据
+
+
+	
+vuex:把数据放在store中,把store挂载到vue实例,然后任意组件都能用store.组件内部用computed获取store中的数据.
+	 把数据放在store中共享.	
+	 vuex中5大部分
+		state, 状态
+		mutations, 
+		actinos, 动作
+		getters, 获取
+		modules
+	
+	例如 store中有state:{num:1}  某个组件中通过dispatch触发actions,commit触发mutations修改state值
+	vuex修改state中属性的唯一方法是commit mutation(同步),  actions是异步的
+		
+
+后端要遵循restful规范. git上的都是遵循restful规范.
+
+
+vue router 官网:https://router.vuejs.org/zh/
+		
+	1.router.push:
+		声明式导航	              编程式导航
+		<router-link :to="...">	  router.push(...)
+		
+		该方法的参数可以是一个字符串路径，或者一个描述地址的对象。路由的几种方式例如：
+			#字符串
+			router.push('home')
+
+			#对象
+			router.push({ path: 'home' })
+
+			#命名的路由 动态路由匹配
+			router.push({ name: 'user', params: { userId: 123 }})
+
+			#带查询参数，变成 /register?plan=private
+			router.push({ path: 'register', query: { plan: 'private' }})		
+	
+	2.router.replace(location, onComplete?, onAbort?)	
+		跟 router.push 很像，唯一的不同就是，它不会向 history 添加新记录，而是跟它的方法名一样 —— 替换掉当前的 history 记录。
+		
+	3.router.go(n)
+		这个方法的参数是一个整数，意思是在 history 记录中向前或者后退多少步，类似 window.history.go(n)。
+		例如:
+			// 在浏览器记录中前进一步，等同于 history.forward()
+			router.go(1)
+
+			// 后退一步记录，等同于 history.back()
+			router.go(-1)
+
+			// 前进 3 步记录
+			router.go(3)
+
+			// 如果 history 记录不够用，那就默默地失败呗
+			router.go(-100)
+			router.go(100)
+				
+			
+	
+	嵌套路由:
+		实际生活中的应用界面，通常由多层嵌套的组件组合而成。同样地，URL 中各段动态路径也按某种结构对应嵌套的各层组件，例如：
+			/user/foo/profile                     /user/foo/posts
+			+------------------+                  +-----------------+
+			| User             |                  | User            |
+			| +--------------+ |                  | +-------------+ |
+			| | Profile      | |  +------------>  | | Posts       | |
+			| |              | |                  | |             | |
+			| +--------------+ |                  | +-------------+ |
+			+------------------+                  +-----------------+
+				
+		
+	重定向:
+		从 /a 重定向到 /b：
+			const router = new VueRouter({
+			  routes: [
+				{ path: '/a', redirect: '/b' }
+			  ]
+			})
+		重定向到命名路由:
+			const router = new VueRouter({
+			  routes: [
+				{ path: '/a', redirect: { name: 'foo' }}
+			  ]
+			})
+			
+			
+	别名:
+		/a 的别名是 /b，意味着，当用户访问 /b 时，URL 会保持为 /b，但是路由匹配则为 /a，就像用户访问 /a 一样。
+			const router = new VueRouter({
+			  routes: [
+				{ path: '/a', component: A, alias: '/b' }
+			  ]
+			})
+			#“别名”的功能让你可以自由地将 UI 结构映射到任意的 URL，而不是受限于配置的嵌套路由结构。
+	
+用bus传值:
+	创建bus实例,挂载到原型上
+		let bus = new Vue()
+		Vue.prototype.$bus = bus;
+	
+	使用:
+		传送的一方: this.$bus.$emit('click','alex')  #事件名和要传的值.
+		接收的一方: this.$bus.$on('click',(val)=>this.name=val;})  #把上面要传的alex给形参val接收
+	
+	
+vuex:
+	官网:https://vuex.vuejs.org/zh/guide/
+	
+	什么是vuex:
+		每一个 Vuex 应用的核心就是 store（仓库）。store基本上就是一个容器，它包含着你的应用中大部分的状态 (state)Vuex 和单纯的全局对象有以下两点不同：
+			1.Vuex 的状态存储是响应式的。当 Vue 组件从 store 中读取状态的时候，若 store 中的状态发生变化，那么相应的组件也会相应地得到高效更新。
+		
+			2.能直接改变 store 中的状态。改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation。这样使得我们可以方便地跟踪每一个状态的变化，从而让我们能够实现一些工具帮助我们更好地了解我们的应用。
+	下载vuex:
+		npm install vuex --save
+		如果在模块化构建系统中，请确保在开头调用了 Vue.use(Vuex)
+		
+		
+		在一个模块化的打包系统中，您必须显式地通过 Vue.use() 来安装 Vuex：
+			import Vue from 'vue'
+			import Vuex from 'vuex'
+			Vue.use(Vuex)
+			
+			当使用全局 script 标签引用 Vuex 时，不需要以上安装过程。
+			
+		Vuex 依赖 Promise。如果你的浏览器并没有实现 Promise (比如 IE)，那么你可以使用一个 polyfill 的库，例如 es6-promise。
+			<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+
+
+	使用:main.js中创建store对象并挂载,在组件中用计算属性computed中this.$.store获取store对象
+		在main.js中:
+			#step1.导入
+			import Vuex from 'vuex'
+			Vue.use(Vuex)
+			
+			#step2.创建vuex实例store
+			let store=new Vuex.Store({
+			  state:{
+				count:10000
+			  }
+			})
+
+			new Vue({
+			  el: '#app',
+			  router,
+			  store, #step3.挂载store到vue对象,挂载后在各个组件中都能通过this.$store获取store
+			  components: { App },
+			  template: '<App/>'
+			})
+
+		使用需要使用store的组件中:				
+			<script>
+				export default {
+					name: "Home",
+				  data(){return {}},
+				  computed:{  #用coumputed监听store值
+					  getCount(){
+						return this.$store.state.count  #用this.$store获取store,然后state.count获取store对象中的state中的count
+					  }
+				  }
+				}
+			</script>
+			
+			{{getCount}}# 使用
+			
+	修改vuex的值: dispatch-acitons--->commit-mutations-->mutate-state-->render-vue组件
+					
+	
+vue-cookies:
+	第一步：安装vue-cookies
+		npm install vue-cookies --save
+
+	第二步：引入和通过 Vue.use() 明确地安装
+		// require
+		var Vue = require('vue')
+		Vue.use(require('vue-cookies'))
+
+		// es2015 module  在main.js中:
+		import Vue from 'Vue'
+		import VueCookies from 'vue-cookies'
+		Vue.use(VueCookies)
+
+	设置cookie
+		this.$cookies.set(keyName, value[, expireTimes[, path[, domain[, secure]]]])   //return this
+
+	获取cookie
+		this.$cookies.get(keyName)       // return value
+
+	删除cookie
+		this.$cookies.remove(keyName [, path [, domain]])   // return  false or true , warning： next version return this； use isKey(keyname) return true/false,please
+
+	存在a cookie name?
+		this.$cookies.isKey(keyName)        // return false or true
+
+	得到所有 cookie name
+		this.$cookies.keys()  // return a array
+
+	警告
+		$ cookies关键名称不能设置为['expires'，'max-age'，'path'，'domain'，'secure']
+
+
+	
+把项目打包上线:*****
+		打包命令:npm run build  打包后会生成dist目录.把dist目录放在linux服务器的ngix上就行了.
+		工作中会架2个服务器,一个是后台的,一个是linx的nginx.
+	
+
+	
+滑动验证用geetest极验 https://www.geetest.com/		
+	极验--技术文档--行为验证--部署文档--客户端部署--web  https://docs.geetest.com/install/deploy/client/web
+	
+	将http://static.geetest.com/static/tools/gt.js 内容粘贴到globle的gt.js文件中,
+	然后在main.js中import '../static/global/gt'导入成全局的,导入这个gt.js文件,然后在各个组件中都可以用了
+	
+	
+	调用初始化函数进行初始化
+		ajax({
+			url: "API1接口（详见服务端部署）",
+			type: "get",
+			dataType: "json",
+			success: function (data) {
+				//请检测data的数据结构， 保证data.gt, data.challenge, data.success有值
+				initGeetest({
+					// 以下配置参数来自服务端 SDK
+					gt: data.gt,
+					challenge: data.challenge,
+					offline: !data.success,
+					new_captcha: true
+				}, function (captchaObj) {
+					// 这里可以调用验证实例 captchaObj 的实例方法
+				})
+			}
+		})
+		以上初始化过程，需要结合服务端 SDK 使用，因为初始化所传入的配置参数来自服务端 SDK。
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
